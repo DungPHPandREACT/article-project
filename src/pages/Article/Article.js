@@ -15,6 +15,12 @@ const Article = () => {
       })
       .then((data) => {
         setArticle(data);
+      })
+      .catch((error) => {
+        console.log('Có chạy vào .catch, :', error);
+      })
+      .finally((done) => {
+        console.log('Có chạy vào cái cuối cùng:', done);
       });
   }, []);
 

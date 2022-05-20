@@ -1,93 +1,174 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PostArticle = () => {
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [author, setAuthor] = useState('');
+  const [content, setContent] = useState('');
+
+  const hanldeChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleChangeSummary = (e) => {
+    setSummary(e.target.value);
+  };
+
+  const handleChangeAuthor = (e) => {
+    setAuthor(e.target.value);
+  };
+
+  const handleChangeContent = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handlePostArticle = async () => {
+    const newArticle = {
+      title,
+      summary,
+      author,
+      content,
+    };
+
+    try {
+      const rawResponse = await fetch(
+        'https://62850adda48bd3c40b7a0c9c.mockapi.io/api/v1/articles',
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newArticle),
+        }
+      );
+      const response = await rawResponse.json();
+      console.log(response);
+
+      toast.success('Post article successfully!', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+    } catch (e) {
+      toast.error(`${e}`, {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+    }
+  };
+
   return (
-    <main className="mb-4">
-      <div className="container px-4 px-lg-5">
-        <div className="row gx-4 gx-lg-5 justify-content-center">
-          <div className="col-md-10 col-lg-8 col-xl-7">
-            <p>
-              Want to get in touch? Fill out the form below to send me a message
-              and I will get back to you as soon as possible!
-            </p>
-            <div className="my-5">
-              {/* * * * * * * * * * * * * * * **/}
-              {/* * * SB Forms Contact Form * **/}
-              {/* * * * * * * * * * * * * * * **/}
-              {/* This form is pre-integrated with SB Forms.*/}
-              {/* To make this form functional, sign up at*/}
-              {/* https://startbootstrap.com/solution/contact-forms*/}
-              {/* to get an API token!*/}
-              <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+    <>
+      <ToastContainer />
+      <header
+        className="masthead"
+        style={{ backgroundImage: 'url("assets/img/home-bg.jpg")' }}
+      >
+        <div className="container position-relative px-4 px-lg-5">
+          <div className="row gx-4 gx-lg-5 justify-content-center">
+            <div className="col-md-10 col-lg-8 col-xl-7">
+              <div className="site-heading">
+                <h1>POST Blog</h1>
+                <span className="subheading">
+                  A Blog Theme by Start Bootstrap
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main className="mb-4">
+        <div className="container px-4 px-lg-5">
+          <div className="row gx-4 gx-lg-5 justify-content-center">
+            <div className="col-md-10 col-lg-8 col-xl-7">
+              <h1>POST ARTICLE</h1>
+              <div className="my-5">
+                {/* * * * * * * * * * * * * * * **/}
+                {/* * * SB Forms Contact Form * **/}
+                {/* * * * * * * * * * * * * * * **/}
+                {/* This form is pre-integrated with SB Forms.*/}
+                {/* To make this form functional, sign up at*/}
+                {/* https://startbootstrap.com/solution/contact-forms*/}
+                {/* to get an API token!*/}
                 <div className="form-floating">
                   <input
                     className="form-control"
-                    id="name"
+                    id="title"
                     type="text"
+                    name="title"
                     placeholder="Enter your name..."
                     data-sb-validations="required"
+                    onChange={hanldeChangeTitle}
                   />
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="name">Title</label>
                   <div
                     className="invalid-feedback"
                     data-sb-feedback="name:required"
                   >
-                    A name is required.
+                    A title is required.
                   </div>
                 </div>
                 <div className="form-floating">
                   <input
                     className="form-control"
-                    id="email"
+                    id="summary"
+                    name="summary"
                     type="email"
-                    placeholder="Enter your email..."
-                    data-sb-validations="required,email"
+                    placeholder="Enter your summary..."
+                    data-sb-validations="required,summary"
+                    onChange={handleChangeSummary}
                   />
-                  <label htmlFor="email">Email address</label>
+                  <label htmlFor="summary">Summary</label>
                   <div
                     className="invalid-feedback"
                     data-sb-feedback="email:required"
                   >
-                    An email is required.
+                    Summary is required.
                   </div>
                   <div
                     className="invalid-feedback"
                     data-sb-feedback="email:email"
                   >
-                    Email is not valid.
+                    Summary is not valid.
                   </div>
                 </div>
                 <div className="form-floating">
                   <input
                     className="form-control"
-                    id="phone"
+                    id="author"
+                    name="author"
                     type="tel"
-                    placeholder="Enter your phone number..."
+                    placeholder="Enter author..."
                     data-sb-validations="required"
+                    onChange={handleChangeAuthor}
                   />
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="author">Author</label>
                   <div
                     className="invalid-feedback"
                     data-sb-feedback="phone:required"
                   >
-                    A phone number is required.
+                    Author is required.
                   </div>
                 </div>
                 <div className="form-floating">
                   <textarea
                     className="form-control"
-                    id="message"
-                    placeholder="Enter your message here..."
+                    id="content"
+                    name="content"
+                    placeholder="Enter content article..."
                     style={{ height: '12rem' }}
                     data-sb-validations="required"
                     defaultValue={''}
+                    onChange={handleChangeContent}
                   />
-                  <label htmlFor="message">Message</label>
+                  <label htmlFor="message">Content</label>
                   <div
                     className="invalid-feedback"
                     data-sb-feedback="message:required"
                   >
-                    A message is required.
+                    Content is required.
                   </div>
                 </div>
                 <br />
@@ -116,18 +197,17 @@ const PostArticle = () => {
                 </div>
                 {/* Submit Button*/}
                 <button
-                  className="btn btn-primary text-uppercase disabled"
-                  id="submitButton"
-                  type="submit"
+                  className="btn btn-primary text-uppercase"
+                  onClick={handlePostArticle}
                 >
-                  Send
+                  Post Article
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 };
 
